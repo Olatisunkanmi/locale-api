@@ -1,4 +1,5 @@
 const winston = require('winston');
+const root = require('app-root-path');
 const fs = require('fs');
 // const config = require('./env');
 const { timeStamp } = require('console');
@@ -35,7 +36,7 @@ class Logger {
 	constructor(options) {
 		// log directory
 		this.label = options.label || 'log';
-		this.logDir = options.logDirPath || `/logs`;
+		this.logDir = options.logDirPath || `${root.path}/logs`;
 		// label options
 		// set logger levvel to dedug
 
