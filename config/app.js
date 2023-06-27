@@ -4,9 +4,10 @@ const { urlencoded, json } = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-// const apiV1Routes = require('../app/routes/v1');
+const apiV1Routes = require('../app/routes/v1');
 const { ApiError } = require('../app/utils');
 const { errController } = require('../app/utils');
+const config = require('./env');
 const { constants, Helper, genericErrors } = require('../app/utils');
 
 const { successResponse } = Helper;
@@ -30,15 +31,23 @@ const appConfig = async (app) => {
 	);
 
 	// serves v1 api routes
-	// app.use('/api/v1/', apiV1Routes);
+	app.use('/api/v1/', apiV1Routes);
+
+	// // catches 404 errors and forwards them to error handlers
+	// app.all('*', (req, res, next) => {
+	// 	next(new ApiError({ message: 'Not Found', status: 404 }));
+	// });
 
 	// catches 404 errors and forwards them to error handlers
 	app.all('*', (req, res, next) => {
-		next(new ApiError({ message: 'Not Found', status: 404 }));
+		next(notFoundApi);
 	});
 
+	// handles all forwarded errors
+	app.use(errController);
+
 	//Server running
-	const PORT = 3000;
+	const PORT = config.PORT || 7000;
 
 	app.listen(PORT, () => {
 		logger.info(` ${LOCALE_RUNNING}  ${PORT}`);

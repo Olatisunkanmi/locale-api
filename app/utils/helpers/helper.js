@@ -4,11 +4,9 @@ const rateLimit = require('express-rate-limit');
 const bcrypt = require('bcrypt');
 // const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-// const { faker } = require('@faker-js/faker');
 const crypto = require('crypto');
 // const config = require('../../../config/env');
 
-// const { PAYSTACK_HASH, PAYSTACK_SECRET_KEY } = config;
 const { serverError } = genericErrors;
 const { SUCCESS_RESPONSE, SUCCESS, FAIL } = constants;
 
@@ -60,6 +58,94 @@ class Helper {
 			message: aggregateError.message,
 			errors: aggregateError.errors,
 		});
+	}
+
+	/**
+	 * it validates a schema and returns a boolean
+	 * @static
+	 * @param { Joi } schema - The validation Schema
+	 * @param { Object } object - The data to be validated { req payload from client}
+	 * @memberof Helper
+	 * @returns { boolean } -True if validation is successfull || Null if otherwise
+	 */
+	static validateInput(schema, object) {
+		return schema.validateAsync(object);
+	}
+
+	/**
+	 * Generates log for module errors.
+	 * @static
+	 * @param {object} error - The module error object.
+	 * @memberof Helpers
+	 * @returns { Null } -  It returns null.
+	 */
+	static moduleErrLogMessager(error) {
+		return logger.error(
+			`${error.status} - ${error.name} - ${error.message}`,
+		);
+	}
+
+	/**
+	 * Checks  if an array is empty
+	 * @static
+	 * @param { Array } arr - Array to be checked
+	 * @memberof Helper
+	 * @returns { Json || Null } - returns JSON || Null if otherwise
+	 */
+	static checkEmptyArray(arr) {
+		if (!arr) {
+			return null;
+		}
+
+		if (arr.length === 0) {
+			return null;
+		}
+		if (arr.length === 1) {
+			return arr[0];
+		}
+		return arr;
+	}
+	/**
+	 * Generates a unique ID
+	 * @static
+	 * @private
+	 * @returns { string } ID - generated ID
+	 */
+	static generateID() {
+		return uuidv4();
+	}
+	/**
+	 * hash password
+	 * @static
+	 * @param { string } password - The password to be hashed
+	 * @memberof Helper
+	 * @returns { string } - A string contaning the hash and salt of a password
+	 */
+	static hashPassword(password) {
+		const salt = bcrypt.genSaltSync(10);
+		return bcrypt.hashSync(password, salt);
+	}
+
+	/**
+	 * This checks if a plain text matches a certain hash value by generating
+	 * a new hash with the salt used to create that hash.
+	 * @static
+	 * @param {string} plainpassword - plain text to be used in the comparison.
+	 * @param {string} hashedpassword - hashed value created with the salt.
+	 * @memberof Helper
+	 * @returns { Boolean } - True if the both passwords match and false if otherwise
+	 */
+	static comparePassword(plainpassword, hashedpassword) {
+		return bcrypt.compareSync(plainpassword, hashedpassword);
+	}
+
+	/**
+	 * Generates unique api key
+	 * @static
+	 * @returns
+	 */
+	static generateApiKey() {
+		return crypto.randomBytes(16).toString('hex');
 	}
 }
 
