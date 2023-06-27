@@ -28,9 +28,9 @@ class UserController {
 
 			newUser = await newUser.save();
 
-			logger.info(newUser);
-
 			successResponse(res, {
+				message:
+					'Please keep your api key safe, you will not be able to retrieve it again.',
 				data: newUser,
 				code: 201,
 			});

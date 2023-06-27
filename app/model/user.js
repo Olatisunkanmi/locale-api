@@ -42,8 +42,6 @@ class UserModel {
 			user = {
 				...user,
 				api_key: this.api_key,
-				message:
-					'Please keep this key safe, you will not be able to retrieve it again.',
 			};
 			return user;
 		} catch (e) {
