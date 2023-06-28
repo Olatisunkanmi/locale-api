@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Locale
+  version: 1.0.0
+servers:
+  - url: http://{{https://locale-api-u09p.onrender.com/}}
+tags:
+  - name: Auth
+  - name: States
+
+paths:
+  #-----------------AUTHENTICATION-------------------
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example: "{\r\n        \"email\" : \"user@mail.com\",\r\n    \"password\": \"newUser\",\r\n}"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Sign Up Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: '{{$randomFirstName}}'
+                last_name: '{{$randomLastName}}'
+                email: user@mail.com
+                password: newUser
+                confirm_password: newUser
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /states/1:
+    post:
+      tags:
+        - States
+      summary: Fetch States
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

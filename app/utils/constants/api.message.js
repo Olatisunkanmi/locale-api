@@ -4,7 +4,9 @@ module.exports = {
 	FAIL: 'fail',
 	v1: '/api/v1',
 	EMAIL_CONFLICT: 'A user with your email already exists',
+	ERROR_FETCHING_STATES: 'Error fetching states',
 	STATES_RETRIEVED_SUCCESSFULLY: 'States retrieved successfully',
+	REGIONS_RETRIEVED_SUCCESSFULLY: 'Regions retrieved successfully',
 	THIRD_PARTY_ERROR: 'Error From Third Party Api',
 	WELCOME:
 		'Welcome to Locale Api, Everything you need about Nigeria GEO',

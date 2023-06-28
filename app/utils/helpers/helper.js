@@ -200,6 +200,10 @@ class Helper {
 			token,
 		};
 	}
+
+	static findObjectByKey(array, value) {
+		return array.find((obj) => obj.state.includes(value));
+	}
 }
 
 module.exports = Helper;

@@ -1,8 +1,16 @@
 const router = require('express').Router();
-const { StateMiddleware } = require('../../../middleware');
+const {
+	LocationMiddleware: { fetchStates, findStateById },
+	QueryMiddleware: { query },
+} = require('../../../middleware');
+const {
+	LocationController: { getStates },
+} = require('../../../controllers');
 
-const { fetchStates } = StateMiddleware;
+router.use(query);
 
-router.get('/', fetchStates);
+router.get('/', fetchStates, getStates);
+
+router.post('/:id', findStateById, getStates);
 
 module.exports = router;

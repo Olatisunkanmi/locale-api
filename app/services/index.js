@@ -1,7 +1,7 @@
 const UserService = require('./user');
-const StateService = require('./states');
+const LocationService = require('./location');
 
 module.exports = {
 	UserService,
-	StateService,
+	LocationService,
 };

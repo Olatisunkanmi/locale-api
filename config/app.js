@@ -33,11 +33,6 @@ const appConfig = async (app) => {
 	// serves v1 api routes
 	app.use('/api/v1/', apiV1Routes);
 
-	// // catches 404 errors and forwards them to error handlers
-	// app.all('*', (req, res, next) => {
-	// 	next(new ApiError({ message: 'Not Found', status: 404 }));
-	// });
-
 	// catches 404 errors and forwards them to error handlers
 	app.all('*', (req, res, next) => {
 		next(notFoundApi);
