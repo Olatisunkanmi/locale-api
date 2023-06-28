@@ -12,6 +12,6 @@ module.exports = {
 	last_name,
 	email FROM users WHERE id = ?`,
 
-	createUser: `INSERT INTO users (id, first_name, last_name, email, password, confirm_password, api_key )
+	createUser: `INSERT INTO users (id, first_name, last_name, email, api_key, password, confirm_password)
 	VALUES(?, ?, ?, ?, ?, ?, ? )`,
 };

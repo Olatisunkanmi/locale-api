@@ -2,7 +2,7 @@ const constants = require('../constants');
 const genericErrors = require('../error/generic');
 const rateLimit = require('express-rate-limit');
 const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 // const config = require('../../../config/env');
@@ -146,6 +146,59 @@ class Helper {
 	 */
 	static generateApiKey() {
 		return crypto.randomBytes(16).toString('hex');
+	}
+	/**
+	 * generates a signed json web token
+	 * @static
+	 * @param { number | string | Buffer | Object } payload - Payload to sign
+	 * @param {number | string} expiresIn - expressed in seconds or a string describing a time span. Default is 2d
+	 * @memberof Helper
+	 * @returns { string }- A signed JWT tokwn
+	 */
+	static generateToken(payload) {
+		const { config } = require('../../../config');
+		return jwt.sign({ payload }, config.SECRET_KEY, {
+			expiresIn: config.SECRET_EXPIRES,
+		});
+	}
+
+	/**
+	 * verify a signed web token
+	 * @static
+	 * @param {string} token - signed token
+	 * @param {string} secret -secret key
+	 * @memberof Helper
+	 * @returns { string | Buffer | Object }- Decoded JWT payload if
+	 * token is valid or an error message if otherwise.
+	 */
+	static verifyToken(token) {
+		const { config } = require('../../../config');
+		return jwt.verify(token, config.SECRET_KEY);
+	}
+	/**
+	 * Generates a token and adds it to the user object
+	 * @static
+	 * @param { Object } user - The user object
+	 * @memberof Helper
+	 * @returns { Object } - The user object with an attached token
+	 */
+	static addTokenToData(user) {
+		const { id, first_name, last_name, email } = user;
+
+		const token = Helper.generateToken({
+			id,
+			first_name,
+			last_name,
+			email,
+		});
+
+		return {
+			id,
+			first_name,
+			last_name,
+			email,
+			token,
+		};
 	}
 }
 
