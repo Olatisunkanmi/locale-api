@@ -28,7 +28,9 @@ module.exports = {
 	LOGIN_USER_SUCCESSFULLY: 'Login Successful',
 	INVALID_EMAIL:
 		'This email does not exist, please enter a registered email',
+	EMAIL_SENT: 'Email sent successfully',
 	USER_NOT_FOUND: 'User not found',
+	ERROR_CREATING_USER: 'Error creating user, please try again',
 	ERROR_FETCHING_USER: 'Error fetching user',
 	ERROR_VERIFYING_USER: 'ERROR VERIFYING USER',
 	ERROR_VERIFYING_USER_MSG:

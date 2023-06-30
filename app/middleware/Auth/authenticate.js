@@ -131,6 +131,39 @@ class AuthenticateMiddleware {
 			}
 		}
 	}
+
+	static async authorize(req, res, next) {
+		// const apiToken = req.headers.authorization.split(' ')[1];
+		const apiKey = req.headers['api-key'];
+
+		if (!apiKey) {
+			errorResponse(req, res, {
+				status: 403,
+				message: AUTH_REQUIRED,
+			});
+		}
+
+		try {
+			const data = await UserService.findApiKey(apiKey);
+
+			const user = Helper.checkEmptyArray(data);
+
+			if (!user) {
+				errorResponse(req, res, {
+					status: 403,
+					message: INVALID_CREDENTIALS,
+				});
+			} else {
+				next();
+			}
+		} catch (e) {
+			Helper.moduleErrLogMessager(e);
+			errorResponse(req, res, {
+				status: 403,
+				message: INVALID_CREDENTIALS,
+			});
+		}
+	}
 }
 
 module.exports = AuthenticateMiddleware;

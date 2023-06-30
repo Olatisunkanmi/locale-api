@@ -1,5 +1,5 @@
 const db = require('../../db');
-const { users } = require('../../db/queries');
+const { users, apiKeys } = require('../../db/queries');
 const { Helper } = require('../../utils');
 
 const { fetchUserByEmail, fetchUserById, fetchUsers } = users;
@@ -70,33 +70,20 @@ class UserService {
 		});
 	}
 
-	// static async populateUserwithCampaign(email, campaign) {
-	// 	try {
-	// 		const data = await UserService.findUserByEmail(email);
-	// 		let user = Helper.checkEmptyArray(data);
-
-	// 		user = UserService.concatUser(user, campaign._id);
-
-	// 		await user.save();
-	// 	} catch (e) {
-	// 		throw e;
-	// 	}
-	// }
-
-	/**
-	 * Concat user object with newly created or chained campaign
-	 * @static
-	 * @memberof UserService
-	 * @returns { Promise<Array<User> | Error> } - A promise that resolves or rejects
-	 * with the user resource or DB Error
-	 */
-	static concatUser(user, camapignId) {
-		// user.campaigns = user.campaigns.concat(camapignId);
-
-		console.log(user.campaigns);
-		user.no_of_campaigns = user.no_of_campaigns + 1;
-
-		return user;
+	static async findApiKey(apiKey) {
+		return new Promise((resolve, reject) => {
+			db.execute(
+				apiKeys.findApiKey,
+				[apiKey],
+				(err, results, fields) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(results);
+					}
+				},
+			);
+		});
 	}
 }
 

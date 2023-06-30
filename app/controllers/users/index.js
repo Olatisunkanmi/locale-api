@@ -1,7 +1,7 @@
-const { UserModel } = require('../../model');
+const { UserModel, ApiKeyModel } = require('../../model');
 const { Helper, constants, ApiError } = require('../../utils');
 const { successResponse, errorResponse } = Helper;
-const { SUCCESS_RESPONSE } = constants;
+const { SUCCESS_RESPONSE, ERROR_CREATING_USER } = constants;
 
 /**
  * A collection of controller methods for users
@@ -22,16 +22,22 @@ class UserController {
 
 	static async createUser(req, res, next) {
 		try {
-			let newUser = await new UserModel({
+			const user = await new UserModel({
 				...req.body,
 			});
 
-			newUser = await newUser.save();
+			let apiKey = await new ApiKeyModel({
+				apiKey: user.api_key,
+				user_id: user.id,
+			});
+
+			const data = await user.save();
+			await apiKey.save();
 
 			successResponse(res, {
 				message:
 					'Please keep your api key safe, you will not be able to retrieve it again.',
-				data: newUser,
+				data: data,
 				code: 201,
 			});
 		} catch (e) {
@@ -39,7 +45,7 @@ class UserController {
 			errorResponse(
 				req,
 				res,
-				new ApiError({ status: 401, message: e.message }),
+				new ApiError({ status: 401, message: ERROR_CREATING_USER }),
 			);
 		}
 	}
